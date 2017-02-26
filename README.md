@@ -1,0 +1,2 @@
+## You Don't Know Javascript
+This repository contains my small code snippets and tests which I am coding as I go through the _You Don't Know Javascript_ books.  The directories in the respository are organized by book and chapters in each book.
