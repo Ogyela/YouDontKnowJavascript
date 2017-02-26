@@ -11,7 +11,7 @@
 			"file": "README.md",
 			"settings":
 			{
-				"buffer_size": 29,
+				"buffer_size": 244,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -68,6 +68,7 @@
 	],
 	"file_history":
 	[
+		"/home/eric_ricketts/.git-credentials"
 	],
 	"find":
 	{
@@ -111,15 +112,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 29,
+						"buffer_size": 244,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								29,
-								29
+								244,
+								244
 							]
 						],
 						"settings":
@@ -243,7 +244,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 150.0,
+	"side_bar_width": 137.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
