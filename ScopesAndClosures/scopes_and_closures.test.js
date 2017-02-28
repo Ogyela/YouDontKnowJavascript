@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 
-describe('Scope Closures', function () {
+describe('Basic Scope And Closures', function () {
  
   it('simple example of a closure', function () {
 
@@ -67,8 +67,10 @@ describe('Scope Closures', function () {
     expect(bar()).to.equal(2); // executes closure of baz
   });
 
- 
+}); // describe Basic Scope And Closures 
 
+describe('Scope And Closures For Loops', function () {
+  
   it('loops and closure function definition results', function () {
     var funcs = [];
     var var_ary = [];
@@ -208,6 +210,31 @@ describe('Scope Closures', function () {
     }
   });
 
- 
+}); // describe Scopes And Closures For Loops
 
-}); // describe Scope Closures
+describe('Scopes And Closures Module Patterns', function () {
+
+  it('basic module pattern', function () {
+    function CoolModule () {
+      var something = "cool";
+      var another = [1, 2, 3];
+
+      function doSomething () {
+        return something;
+      }
+
+      function doAnother () {
+        return another;
+      }
+
+      return {
+        doSomething: doSomething,
+        doAnother: doAnother
+      }
+    }      
+
+    var foo = CoolModule();
+    expect(foo.doSomething()).to.equal('cool');
+    expect(foo.doAnother()).to.deep.equal([1, 2, 3]);
+  });  
+}); // describe Scopes and Closures Module Pattern
