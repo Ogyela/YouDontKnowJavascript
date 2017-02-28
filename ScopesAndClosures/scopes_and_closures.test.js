@@ -214,7 +214,7 @@ describe('Scope And Closures For Loops', function () {
 
 describe('Scopes And Closures Module Patterns', function () {
 
-  it('basic module pattern', function () {
+  it('basic module pattern, the revealing module', function () {
     function CoolModule () {
       var something = "cool";
       var another = [1, 2, 3];
@@ -236,5 +236,62 @@ describe('Scopes And Closures Module Patterns', function () {
     var foo = CoolModule();
     expect(foo.doSomething()).to.equal('cool');
     expect(foo.doAnother()).to.deep.equal([1, 2, 3]);
+  });
+
+  it('return an inner function', function () {
+    function CoolModule () {
+      var something = "cool";
+
+      function doSomething () {
+        return something;
+      }
+
+      return doSomething;
+    }
+
+    var foo = CoolModule();
+    expect(foo()).to.equal('cool');              
+  });
+
+  it('module pattern with IIFE', function () {
+      var foo = (function CoolModule () {
+      var something = "cool";
+      var another = [1, 2, 3];
+
+      function doSomething () {
+        return something;
+      }
+
+      function doAnother () {
+        return another;
+      }
+
+      return {
+        doSomething: doSomething,
+        doAnother: doAnother
+      }
+    })();
+    expect(foo.doSomething()).to.equal('cool');
+    expect(foo.doAnother()).to.deep.equal([1, 2, 3]);      
   });  
+
+  it('modules with parameters', function () {
+    function CoolModule (id) {
+
+      function identify () {
+        return id;
+      }
+
+      return {
+        identify: identify
+      }
+    }
+
+    var foo1 = CoolModule('foo 1');
+    var foo2 = CoolModule('foo 2');
+
+    expect(foo1.identify()).to.equal('foo 1');
+    expect(foo2.identify()).to.equal('foo 2');
+  });
+
 }); // describe Scopes and Closures Module Pattern
