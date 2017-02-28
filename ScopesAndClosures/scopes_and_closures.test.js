@@ -196,6 +196,18 @@ describe('Scope Closures', function () {
     }       
   }); 
 
+  it('reduced let implementation', function () {
+    var funcs = [];
+    for (let i = 0; i <= 5; i++) {
+      funcs[i] = function () {
+        return i;
+      }
+    }
+    for (let j = 0; j <= 5; j++) {
+      expect(funcs[j]()).to.equal(j);
+    }
+  });
+
  
 
 }); // describe Scope Closures
