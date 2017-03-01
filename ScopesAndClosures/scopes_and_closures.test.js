@@ -322,4 +322,50 @@ describe('Scopes And Closures Module Patterns', function () {
     expect(foo.identify()).to.equal('FOO MODULE');
   });
 
+  it('modern modules example', function () {
+    var MyModules = (function Manager() {
+      var modules = {};
+
+      function define(name, deps, impl) {
+        for (var i=0; i<deps.length; i++) {
+          deps[i] = modules[deps[i]];
+        }
+        modules[name] = impl.apply(impl, deps);
+      }
+
+      function get(name) {
+        return modules[name];
+      }
+
+      return {
+        define: define,
+        get: get
+      };
+    })();
+
+    MyModules.define("bar", [], function() {
+      function hello(who) {
+        return "Let me introduce: " + who;
+      }
+
+      return { hello: hello };
+    });
+
+    MyModules.define("foo", ["bar"], function(bar) {
+      var hungry = "hippo";
+
+      function awesome () {
+        return bar.hello(hungry).toUpperCase();
+      }
+
+      return { awesome: awesome };
+    });
+
+    var bar = MyModules.get("bar");
+    var foo = MyModules.get("foo");
+
+    expect(bar.hello("hippo")).to.equal("Let me introduce: hippo");
+    expect(foo.awesome()).to.equal("LET ME INTRODUCE: HIPPO");
+  });
+
 }); // describe Scopes and Closures Module Pattern
