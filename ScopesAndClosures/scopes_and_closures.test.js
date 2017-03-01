@@ -294,4 +294,32 @@ describe('Scopes And Closures Module Patterns', function () {
     expect(foo2.identify()).to.equal('foo 2');
   });
 
+  it('name the object you are returning as your API', function () {
+    var foo = (function CoolModule(id) {
+      function change () {
+        publicAPI.identify = identify2;
+      }
+
+      function identify1 () {
+        return id;
+      }
+
+      function identify2 () {
+        return id.toUpperCase();
+      }
+
+      var publicAPI = {
+        change: change,
+        identify: identify1
+      };
+
+      return publicAPI;
+
+    })("foo module");
+
+    expect(foo.identify()).to.equal('foo module');
+    foo.change();
+    expect(foo.identify()).to.equal('FOO MODULE');
+  });
+
 }); // describe Scopes and Closures Module Pattern
