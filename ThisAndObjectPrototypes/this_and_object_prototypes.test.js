@@ -110,4 +110,17 @@ describe('This And Object Prototypes', function () {
 		});
 
 	}); // describe Basic This Examples
+
+
+	describe('Default Binding Rule', function () {
+		
+		it('for ES2015 function declarations are in strict mode', function () {
+			var a = 2;
+			function foo() {
+				return this.a;
+			}
+			expect(foo()).to.be.undefined;
+		});
+	}); // describe Default Binding Rule
+
 }); // describe This And Object Prototypes
