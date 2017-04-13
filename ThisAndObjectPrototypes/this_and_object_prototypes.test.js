@@ -113,14 +113,118 @@ describe('This And Object Prototypes', function () {
 
 
 	describe('Default Binding Rule', function () {
-		
-		it('for ES2015 function declarations are in strict mode', function () {
-			var a = 2;
-			function foo() {
+
+		var a, foo;
+
+		beforeEach(function () {
+			a = 2;
+			foo = function () {
 				return this.a;
 			}
-			expect(foo()).to.be.undefined;
 		});
+		
+		it('for ES6 function declarations are in strict mode', function () {
+			expect(a).to.equal(2);
+			expect(foo()).to.be.undefined;
+			// prior to ES6 'this' was the global object by default, meaning 'a' was now a property
+			// on the global object.  In the past foo() would have returned 2 without the 'strict'
+			// declaration inside the function declaration.  With the 'strict' declaration the global object
+			// is not available for the default binding.  So as we can see from the assertions above
+			// 'a' is declared and assigned in the global object space however, 'this', which refers to the
+			// global object, is not avaiable for the default binding so it is undefined.
+		});
+
 	}); // describe Default Binding Rule
+
+	describe('Implicit Binding Rule', function () {
+
+		var obj, foo;
+
+		beforeEach(function () {
+			foo = function () {
+				return this.a;
+			}
+			obj = {
+				a: 2,
+				foo: foo
+			}					
+		});
+
+		it('at the time of function invocation, the object provides the context for this', function () {
+			expect(obj.foo()).to.equal(2);
+			// so in this case even though the function foo is defined outside of the object declaration at
+			// the time of function invocation, the object which is the receiver of the method call provies
+			// the context for 'this', so in this case 'this' refers to 'obj' which includes the property 'a'				
+		});
+
+
+		it('implicit binding can be lost', function () {
+			var bar = obj.foo;
+			var a = "oops, I lost my binding";
+			expect(bar()).to.be.undefined;
+			/*
+			in this case bar is nothing but a reference to the function foo(), so when a is redefiend at the global
+			level the default binding rule takes precedence but because we are using ES6, the global object is not
+			available for default binding so the output is undefined.
+			*/
+		});	
+
+	}); // describe Implicit Binding Rule
+
+	describe('Explicit and Hard Binding', function () {
+		
+		var obj, foo, foo1;
+
+		beforeEach(function () {
+			foo = function () {
+				return this.a;
+			}
+			foo1 = function (something) {
+				return this.a + something;
+			}
+			obj = { a: 2 }
+		});
+
+		it('explicitly bind a value for this to the function by using call() or apply()', function () {
+			expect(foo.call(obj)).to.equal(2);
+		});
+
+		it('hard binding, defined a function which returns the explicitly bound function', function () {
+			function bar() {
+				return foo1.apply(obj, arguments);
+			}
+			var b = bar(3);
+			expect(b).to.equal(5);
+			/*
+			I was confused as to how this hard binding works.  The key to understanding the concept here is
+			that the function bar returns a function, so when we invoke bar by var b = bar(3) we are actually
+			calling the foo1.apply(obj, arguments) function, this is why bar can recieve arguments when at the
+			beginning of its function declaration function bar () {...} it does not have any arguments.
+			*/
+		});
+
+		it('programmatically invoke a hard binding', function () {
+			function myBind(fn, obj) {
+				return function() {
+					return fn.apply(obj, arguments);
+				}
+			}
+			var bar = myBind(foo1, obj);
+			var b = bar(3);
+			expect(b).to.equal(5);
+			/*
+			In this case we have to return a function from the myBind function.  This is so because the statement
+			var bar = myBind(foo1, obj) only references the function defined within the body.  So bar = myBind(foo1, obj);
+			really is now defined as function() { return fn.apply(obj, arguments); }, but bar needs to be invoked to have
+			any effect, so now the invocation has the same effect as the previous example, where '3' is passed in as
+			arguments.
+			*/
+		});
+
+		it('however, javascript provides its own bind operator', function () {
+			var bar = foo1.bind(obj);
+			expect(bar(3)).to.equal(5);
+		});
+	});
 
 }); // describe This And Object Prototypes
