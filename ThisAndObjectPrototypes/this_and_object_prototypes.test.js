@@ -225,6 +225,40 @@ describe('This And Object Prototypes', function () {
 			var bar = foo1.bind(obj);
 			expect(bar(3)).to.equal(5);
 		});
+	}); // describe Explicit and Hard Binding
+
+	describe('New Constructor Call', function () {
+		
+		var Foo;
+
+		beforeEach(function () {
+			Foo = function (a) {
+				this.a = a;
+			}		
+		});
+
+		it("produces a new object with 'this' set to the newly created object", function () {
+			let foo = new Foo(3);
+			expect(foo.a).to.equal(3);		
+		});
+	});
+
+	describe('Order of Precedence For this binding operations', function () {
+
+		var Foo, obj1, obj2;
+
+		beforeEach(function () {
+			Foo = function () {
+				return this.a;
+			}
+			obj1 = { a: 2, foo: Foo };
+			obj2 = { a: 3, foo: Foo };
+		});
+		
+		it('explicit over implicit', function () {
+			expect(obj1.foo()).to.equal(2);
+			expect(obj2.foo()).to.equal(3);		
+		});
 	});
 
 }); // describe This And Object Prototypes
