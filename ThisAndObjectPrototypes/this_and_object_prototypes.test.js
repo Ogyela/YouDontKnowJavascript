@@ -245,14 +245,19 @@ describe('This And Object Prototypes', function () {
 
 	describe('Order of Precedence For this binding operations', function () {
 
-		var Foo, obj1, obj2;
+		var Foo, Foo1, obj1, obj2, obj3, obj4;
 
 		beforeEach(function () {
 			Foo = function () {
 				return this.a;
 			}
+			Foo1 = function (x) {
+				this.a = x;
+			}
 			obj1 = { a: 2, foo: Foo };
 			obj2 = { a: 3, foo: Foo };
+			obj3 = { foo: Foo1 };
+			obj4 = {};
 		});
 		
 		it('explicit over implicit', function () {
@@ -260,6 +265,17 @@ describe('This And Object Prototypes', function () {
 			expect(obj2.foo()).to.equal(3);
 			expect(obj1.foo.call(obj2)).to.equal(3);
 			expect(obj2.foo.call(obj1)).to.equal(2);		
+		});
+
+		it('new over implicit', function () {
+			obj3.foo(5);
+			expect(obj3.a).to.equal(5);
+			obj3.foo.call(obj4, 6);
+			expect(obj3.a).to.equal(5);
+			expect(obj4.a).to.equal(6);
+			var bar = new obj3.foo(7);
+			expect(obj3.a).to.equal(5);
+			expect(bar.a).to.equal(7);
 		});
 	});
 
