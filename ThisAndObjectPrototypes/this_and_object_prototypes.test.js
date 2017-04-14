@@ -257,7 +257,9 @@ describe('This And Object Prototypes', function () {
 		
 		it('explicit over implicit', function () {
 			expect(obj1.foo()).to.equal(2);
-			expect(obj2.foo()).to.equal(3);		
+			expect(obj2.foo()).to.equal(3);
+			expect(obj1.foo.call(obj2)).to.equal(3);
+			expect(obj2.foo.call(obj1)).to.equal(2);		
 		});
 	});
 
