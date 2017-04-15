@@ -267,15 +267,15 @@ describe('This And Object Prototypes', function () {
 			expect(obj2.foo.call(obj1)).to.equal(2);		
 		});
 
-		it('new over implicit', function () {
+		it('new over explicit', function () {
 			obj3.foo(5);
-			expect(obj3.a).to.equal(5);
-			obj3.foo.call(obj4, 6);
-			expect(obj3.a).to.equal(5);
-			expect(obj4.a).to.equal(6);
 			var bar = new obj3.foo(7);
 			expect(obj3.a).to.equal(5);
 			expect(bar.a).to.equal(7);
+			/*
+			the new constructor returns a new object in this case bar, so the 'a' property
+			of obj3 is not modified.
+			*/
 		});
 	});
 
